@@ -106,8 +106,9 @@ default_envs = STM32F103RET6_creality
 G92 E0 ; Reset Extruder
 G28 ; Home all axes
 
-G29 L0 ; Load the mesh stored in slot 1
-G29 J ; Probe 3 points to tilt mesh
+G29 A ; Activate the UBL System
+G29 L1 ; Load the mesh stored in slot 1
+G29 J2 ; Probe 4 points to tilt mesh
 
 G1 Z2.0 F3000 ; Move Z Axis up little to prevent scratching of Heat Bed
 G1 X0.5 Y20 Z0.3 F5000.0 ; Move to start position
@@ -117,6 +118,7 @@ G1 X0.8 Y20 Z0.3 F1500.0 E30 ; Draw the second line
 G92 E0 ; Reset Extruder
 G1 Z2.0 F3000 ; Move Z Axis up little to prevent scratching of Heat Bed
 G1 X5 Y20 Z0.3 F5000.0 ; Move over to prevent blob squish
+
 
 
 **End G-Code**
@@ -141,13 +143,17 @@ M84 X Y E ;Disable all steppers but Z
 
 **OctoPrint Settings**
 
-**BLTouch Mesh Probing G Code**
-G28       ; home all axes
+**Bed Visualizer Plugin Settings**
+
 M155 S30  ; reduce temperature reporting rate to reduce output pollution
 M190 S60  ; (optional) wait for the bed to get up to temperature
+G28       ; home all axes
 G29 P1    ; automatically populate mesh with all reachable points
 G29 P3    ; infer the rest of the mesh values
 G29 P3    ; infer the rest of the mesh values again
+G29 S1 ; Save UBL mesh points to EEPROM in Slot 1
+G29 F 10.0 ; Set Fade Height for correction at 10.0 mm
+G29 A ; Activate the UBL System
 @BEDLEVELVISUALIZER	; tell the plugin to watch for reported mesh
 M420 S1 V ; enabled leveling and report the new mesh
 M500      ; save the new mesh to EEPROM
